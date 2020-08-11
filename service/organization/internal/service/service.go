@@ -2,11 +2,9 @@ package service
 
 import (
 	"context"
-	"fmt"
-
+	"github.com/go-kratos/kratos/pkg/conf/paladin"
 	pb "github.com/vazmin/eagle-eye-kratos/service/organization/api"
 	"github.com/vazmin/eagle-eye-kratos/service/organization/internal/dao"
-	"github.com/go-kratos/kratos/pkg/conf/paladin"
 
 	"github.com/golang/protobuf/ptypes/empty"
 	"github.com/google/wire"
@@ -31,20 +29,20 @@ func New(d dao.Dao) (s *Service, cf func(), err error) {
 	return
 }
 
-// SayHello grpc demo func.
-func (s *Service) GetOrganization(ctx context.Context) (reply *empty.Empty, err error) {
-	reply = new(empty.Empty)
-	fmt.Printf("hello %s", req.Name)
-	return
+func (s *Service) GetOrganization(ctx context.Context, req *pb.GetOrgReq) (resp *pb.Organization, err error) {
+	return s.dao.Organization(ctx, req.OrganizationId)
 }
 
-// SayHelloURL bm demo func.
-func (s *Service) SayHelloURL(ctx context.Context, req *pb.HelloReq) (reply *pb.HelloResp, err error) {
-	reply = &pb.HelloResp{
-		Content: "hello " + req.Name,
-	}
-	fmt.Printf("hello url %s", req.Name)
-	return
+func (s *Service) AddOrganization(ctx context.Context, req *pb.Organization) (*empty.Empty, error) {
+	return &empty.Empty{}, s.dao.InsertOrganization(ctx, req)
+}
+
+func (s *Service) UpdateOrganization(ctx context.Context, req *pb.Organization) (*empty.Empty, error) {
+	return &empty.Empty{}, s.dao.UpdateOrganization(ctx, req)
+}
+
+func (s *Service) DeleteOrganization(ctx context.Context, req *pb.Organization) (*empty.Empty, error){
+	return &empty.Empty{}, s.dao.DeleteOrganization(ctx, req)
 }
 
 // Ping ping the resource.

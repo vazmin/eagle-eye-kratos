@@ -2,11 +2,22 @@ package dao
 
 import (
 	"context"
+	"fmt"
+	"github.com/vazmin/eagle-eye-kratos/service/organization/internal/model"
 
 	"github.com/go-kratos/kratos/pkg/cache/redis"
 	"github.com/go-kratos/kratos/pkg/conf/paladin"
 	"github.com/go-kratos/kratos/pkg/log"
 )
+
+type _redis interface {
+	// mc: -key=keyArt -type=get
+	CacheOrg(c context.Context, orgId string) (*model.Article, error)
+	// mc: -key=keyArt -expire=d.demoExpire
+	AddCacheOrg(c context.Context, orgId string, art *model.Article) (err error)
+	// mc: -key=keyArt
+	DeleteOrgCache(c context.Context, orgId string) (err error)
+}
 
 func NewRedis() (r *redis.Redis, cf func(), err error) {
 	var (
@@ -29,4 +40,8 @@ func (d *dao) PingRedis(ctx context.Context) (err error) {
 		log.Error("conn.Set(PING) error(%v)", err)
 	}
 	return
+}
+
+func keyOrg(orgId string) string {
+	return fmt.Sprintf("org_%s", orgId)
 }

@@ -1,0 +1,35 @@
+### get organization
+GET {{org_http}}/organization?organizationId=6c28e4f4-9020-4378-8096-5543564869ef
+
+
+### add organization
+POST {{org_http}}/organization
+Content-Type: application/json;charset=UTF-8
+
+{
+  "id": "{{$uuid}}",
+  "name": "foo",
+  "contactName": "a",
+  "contactEmail": "b",
+  "contactPhone": "c"
+}
+
+### update organization
+PUT {{org_http}}/organization
+Content-Type: application/json;charset=UTF-8
+
+{
+  "id": "6c28e4f4-9020-4378-8096-5543564869ef",
+  "name": "bar",
+  "contactName": "a",
+  "contactEmail": "b",
+  "contactPhone": "c"
+}
+
+### update organization
+DELETE {{org_http}}/organization
+Content-Type: application/json;charset=UTF-8
+
+{
+  "id": "b372fb9f-ed45-434c-b243-d122f3e648f2"
+}

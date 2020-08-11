@@ -3,11 +3,10 @@ package http
 import (
 	"net/http"
 
-	pb "github.com/vazmin/eagle-eye-kratos/service/organization/api"
-	"github.com/vazmin/eagle-eye-kratos/service/organization/internal/model"
 	"github.com/go-kratos/kratos/pkg/conf/paladin"
 	"github.com/go-kratos/kratos/pkg/log"
 	bm "github.com/go-kratos/kratos/pkg/net/http/blademaster"
+	pb "github.com/vazmin/eagle-eye-kratos/service/organization/api"
 )
 
 var svc pb.OrganizationSvcServer
@@ -34,10 +33,6 @@ func New(s pb.OrganizationSvcServer) (engine *bm.Engine, err error) {
 
 func initRouter(e *bm.Engine) {
 	e.Ping(ping)
-	g := e.Group("/organization")
-	{
-		g.GET("/start", howToStart)
-	}
 }
 
 func ping(ctx *bm.Context) {
@@ -45,12 +40,4 @@ func ping(ctx *bm.Context) {
 		log.Error("ping error(%v)", err)
 		ctx.AbortWithStatus(http.StatusServiceUnavailable)
 	}
-}
-
-// example for http request handler.
-func howToStart(c *bm.Context) {
-	k := &model.Kratos{
-		Hello: "Golang 大法好 !!!",
-	}
-	c.JSON(k, nil)
 }

@@ -16,19 +16,37 @@ option go_package = "api";
 option (gogoproto.goproto_getters_all) = false;
 
 message Organization {
-  string id = 1;
-  string name = 2;
-  string contactName = 3;
-  string contactEmail = 4;
-  string contactPhone = 5;
+  string id = 1 [(gogoproto.moretags) = 'ddb:"organization_id"'];
+  string name = 2 [(gogoproto.moretags) = 'ddb:"name"'];
+  string contactName = 3[(gogoproto.moretags) = 'ddb:"contact_name"'];
+  string contactEmail = 4[(gogoproto.moretags) = 'ddb:"contact_email"'];
+  string contactPhone = 5[(gogoproto.moretags) = 'ddb:"contact_phone"'];
 }
 
 service OrganizationSvc {
   rpc Ping(.google.protobuf.Empty) returns (.google.protobuf.Empty);
-  rpc GetOrganization(.google.protobuf.Empty) returns (Organization) {
+  rpc GetOrganization(GetOrgReq) returns (Organization) {
     option (google.api.http) = {
-      get: "/organization/:organizationId"
+      get: "/organization"
+    };
+  };
+  rpc AddOrganization(Organization) returns (.google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/organization"
+    };
+  };
+  rpc UpdateOrganization(Organization) returns (.google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/organization"
+    };
+  };
+  rpc DeleteOrganization(Organization) returns (.google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/organization"
     };
   };
 }
 
+message GetOrgReq {
+  string organizationId = 1 [(gogoproto.moretags) = 'form:"organizationId" validate:"required"'];
+}

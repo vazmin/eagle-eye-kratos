@@ -28,13 +28,3 @@
         interval: 20s
         timeout: 1s
         retries: 20
-  
-    memcached:
-      image: memcached
-      ports:
-        - 21211:11211
-      healthcheck:
-        test: ["CMD", "echo", "stats", "|",  "nc", "127.0.0.1", "11211"]
-        interval: 20s
-        timeout: 1s
-        retries: 20
