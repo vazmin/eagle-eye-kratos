@@ -1,0 +1,36 @@
+### get licenses
+GET {{license_http}}/v1/licenses?organizationId=442adb6e-fa58-47f3-9ca2-ed1fecdfe86c
+
+### get license
+GET {{license_http}}/v1/license?organizationId=442adb6e-fa58-47f3-9ca2-ed1fecdfe86c&licenseId=d9b2db2e-c28e-4480-a705-c6c0b1b21f4a
+
+### add license
+POST {{license_http}}/v1/license
+Content-Type: application/json;charset=UTF-8
+
+{
+  "licenseId": "{{$uuid}}",
+  "organizationId": "442adb6e-fa58-47f3-9ca2-ed1fecdfe86c",
+  "licenseType": "foo",
+  "produceName": "f",
+  "licenseMax": 199,
+  "licenseAllocated": 8
+}
+
+### update organization
+PUT {{license_http}}/v1/license
+Content-Type: application/json;charset=UTF-8
+
+{
+  "licenseId": "d9b2db2e-c28e-4480-a705-c6c0b1b21f4a",
+  "organizationId": "442adb6e-fa58-47f3-9ca2-ed1fecdfe86c",
+  "licenseAllocated": 9
+}
+
+### update organization
+DELETE {{org_http}}/organization
+Content-Type: application/json;charset=UTF-8
+
+{
+  "id": "b372fb9f-ed45-434c-b243-d122f3e648f2"
+}

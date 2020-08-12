@@ -1,0 +1,321 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "api.proto",
+        "version": "1"
+    },
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "consumes": [
+        "application/json",
+        "multipart/form-data"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/eagle.licensing.v1.Licensing/Ping": {
+            "get": {
+                "summary": "/eagle.licensing.v1.Licensing/Ping",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "$ref": "#/definitions/.google.protobuf.Empty"
+                                }
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "eagle.licensing.v1.Licensing"
+                ]
+            }
+        },
+        "/v1/license": {
+            "get": {
+                "summary": "/v1/license",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "$ref": "#/definitions/.eagle.licensing.v1.License"
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "organizationId",
+                        "in": "query",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "licenseId",
+                        "in": "query",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "eagle.licensing.v1.Licensing"
+                ]
+            },
+            "delete": {
+                "summary": "/v1/license",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "$ref": "#/definitions/.google.protobuf.Empty"
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/.eagle.licensing.v1.License"
+                        }
+                    }
+                ],
+                "tags": [
+                    "eagle.licensing.v1.Licensing"
+                ]
+            },
+            "post": {
+                "summary": "/v1/license",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "$ref": "#/definitions/.google.protobuf.Empty"
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/.eagle.licensing.v1.License"
+                        }
+                    }
+                ],
+                "tags": [
+                    "eagle.licensing.v1.Licensing"
+                ]
+            },
+            "put": {
+                "summary": "/v1/license",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "$ref": "#/definitions/.google.protobuf.Empty"
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/.eagle.licensing.v1.License"
+                        }
+                    }
+                ],
+                "tags": [
+                    "eagle.licensing.v1.Licensing"
+                ]
+            }
+        },
+        "/v1/licenses": {
+            "get": {
+                "summary": "/v1/licenses",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "code": {
+                                    "type": "integer"
+                                },
+                                "message": {
+                                    "type": "string"
+                                },
+                                "data": {
+                                    "$ref": "#/definitions/.eagle.licensing.v1.Licenses"
+                                }
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "organizationId",
+                        "in": "query",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "eagle.licensing.v1.Licensing"
+                ]
+            }
+        }
+    },
+    "definitions": {
+        ".eagle.licensing.v1.GetLicenseReq": {
+            "type": "object",
+            "properties": {
+                "organizationId": {
+                    "type": "string"
+                },
+                "licenseId": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "organizationId",
+                "licenseId"
+            ]
+        },
+        ".eagle.licensing.v1.GetLicensesByOrgReq": {
+            "type": "object",
+            "properties": {
+                "organizationId": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "organizationId"
+            ]
+        },
+        ".eagle.licensing.v1.License": {
+            "type": "object",
+            "properties": {
+                "licenseId": {
+                    "type": "string"
+                },
+                "organizationId": {
+                    "type": "string"
+                },
+                "licenseType": {
+                    "type": "string"
+                },
+                "produceName": {
+                    "type": "string"
+                },
+                "licenseMax": {
+                    "type": "integer"
+                },
+                "licenseAllocated": {
+                    "type": "integer"
+                },
+                "comment": {
+                    "type": "string"
+                },
+                "organization": {
+                    "$ref": "#/definitions/.eagle.organization.v1.Organization"
+                }
+            }
+        },
+        ".eagle.licensing.v1.Licenses": {
+            "type": "object",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/.eagle.licensing.v1.License"
+                    }
+                }
+            }
+        },
+        ".eagle.organization.v1.Organization": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "contactName": {
+                    "type": "string"
+                },
+                "contactEmail": {
+                    "type": "string"
+                },
+                "contactPhone": {
+                    "type": "string"
+                }
+            }
+        },
+        ".google.protobuf.Empty": {
+            "type": "object",
+            "properties": {},
+            "description": "A generic empty message that you can re-use to avoid defining duplicated\n empty messages in your APIs. A typical example is to use it as the request\n or the response type of an API method. For instance:\n\n     service Foo {\n       rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);\n     }\n\n The JSON representation for `Empty` is empty JSON object `{}`."
+        }
+    }
+}

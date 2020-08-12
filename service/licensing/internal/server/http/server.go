@@ -3,17 +3,16 @@ package http
 import (
 	"net/http"
 
-	pb "github.com/vazmin/eagle-eye-kratos/service/licensing/api"
-	"github.com/vazmin/eagle-eye-kratos/service/licensing/internal/model"
 	"github.com/go-kratos/kratos/pkg/conf/paladin"
 	"github.com/go-kratos/kratos/pkg/log"
 	bm "github.com/go-kratos/kratos/pkg/net/http/blademaster"
+	pb "github.com/vazmin/eagle-eye-kratos/service/licensing/api"
 )
 
-var svc pb.DemoServer
+var svc pb.LicensingServer
 
 // New new a bm server.
-func New(s pb.DemoServer) (engine *bm.Engine, err error) {
+func New(s pb.LicensingServer) (engine *bm.Engine, err error) {
 	var (
 		cfg bm.ServerConfig
 		ct paladin.TOML
@@ -26,7 +25,7 @@ func New(s pb.DemoServer) (engine *bm.Engine, err error) {
 	}
 	svc = s
 	engine = bm.DefaultServer(&cfg)
-	pb.RegisterDemoBMServer(engine, s)
+	pb.RegisterLicensingBMServer(engine, s)
 	initRouter(engine)
 	err = engine.Start()
 	return
@@ -34,10 +33,6 @@ func New(s pb.DemoServer) (engine *bm.Engine, err error) {
 
 func initRouter(e *bm.Engine) {
 	e.Ping(ping)
-	g := e.Group("/licensing")
-	{
-		g.GET("/start", howToStart)
-	}
 }
 
 func ping(ctx *bm.Context) {
@@ -45,12 +40,4 @@ func ping(ctx *bm.Context) {
 		log.Error("ping error(%v)", err)
 		ctx.AbortWithStatus(http.StatusServiceUnavailable)
 	}
-}
-
-// example for http request handler.
-func howToStart(c *bm.Context) {
-	k := &model.Kratos{
-		Hello: "Golang 大法好 !!!",
-	}
-	c.JSON(k, nil)
 }

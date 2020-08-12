@@ -6,29 +6,65 @@ syntax = "proto3";
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
+import "github.com/vazmin/eagle-eye-kratos/service/organization/api/api.proto";
 
 // package 命名使用 {appid}.{version} 的方式, version 形如 v1, v2 ..
-package demo.service.v1;
+package eagle.licensing.v1;
 
 // NOTE: 最后请删除这些无用的注释 (゜-゜)つロ
 
 option go_package = "api";
 option (gogoproto.goproto_getters_all) = false;
 
-service Demo {
+message License {
+  string licenseId = 1 [(gogoproto.moretags) = 'ddb:"license_id"'];
+  string organizationId = 2 [(gogoproto.moretags) = 'ddb:"organization_id"'];
+  string licenseType = 3[(gogoproto.moretags) = 'ddb:"license_type"'];
+  string produceName = 4[(gogoproto.moretags) = 'ddb:"product_name"'];
+  int32 licenseMax = 5[(gogoproto.moretags) = 'ddb:"license_max"'];
+  int32 licenseAllocated = 6[(gogoproto.moretags) = 'ddb:"license_allocated"'];
+  string comment = 7[(gogoproto.moretags) = 'ddb:"comment"'];
+  eagle.organization.v1.Organization organization = 8;
+}
+
+message Licenses {
+  repeated License list = 1;
+}
+
+service Licensing {
   rpc Ping(.google.protobuf.Empty) returns (.google.protobuf.Empty);
-  rpc SayHello(HelloReq) returns (.google.protobuf.Empty);
-  rpc SayHelloURL(HelloReq) returns (HelloResp) {
+  rpc GetLicensesByOrg(GetLicensesByOrgReq) returns (Licenses) {
     option (google.api.http) = {
-      get: "/kratos-demo/say_hello"
+      get: "/v1/licenses"
+    };
+  };
+  rpc GetLicense(GetLicenseReq) returns (License) {
+    option (google.api.http) = {
+      get: "/v1/license"
+    };
+  };
+  rpc AddLicense(License) returns (.google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/license"
+    };
+  };
+  rpc UpdateLicense(License) returns (.google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/v1/license"
+    };
+  };
+  rpc DeleteLicense(License) returns (.google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/v1/license"
     };
   };
 }
 
-message HelloReq {
-  string name = 1 [(gogoproto.moretags) = 'form:"name" validate:"required"'];
+message GetLicensesByOrgReq {
+  string organizationId = 1 [(gogoproto.moretags) = 'form:"organizationId" validate:"required"'];
 }
 
-message HelloResp {
-  string Content = 1 [(gogoproto.jsontag) = 'content'];
+message GetLicenseReq {
+  string organizationId = 1 [(gogoproto.moretags) = 'form:"organizationId" validate:"required"'];
+  string licenseId = 2 [(gogoproto.moretags) = 'form:"licenseId" validate:"required"'];
 }

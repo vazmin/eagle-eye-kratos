@@ -25,52 +25,91 @@ var _ *bm.Context
 var _ context.Context
 var _ binding.StructValidator
 
-var PathDemoPing = "/demo.service.v1.Demo/Ping"
-var PathDemoSayHello = "/demo.service.v1.Demo/SayHello"
-var PathDemoSayHelloURL = "/kratos-demo/say_hello"
+var PathLicensingPing = "/eagle.licensing.v1.Licensing/Ping"
+var PathLicensingGetLicensesByOrg = "/v1/licenses"
+var PathLicensingGetLicense = "/v1/license"
+var PathLicensingAddLicense = "/v1/license"
+var PathLicensingUpdateLicense = "/v1/license"
+var PathLicensingDeleteLicense = "/v1/license"
 
-// DemoBMServer is the server API for Demo service.
-type DemoBMServer interface {
+// LicensingBMServer is the server API for Licensing service.
+type LicensingBMServer interface {
 	Ping(ctx context.Context, req *google_protobuf1.Empty) (resp *google_protobuf1.Empty, err error)
 
-	SayHello(ctx context.Context, req *HelloReq) (resp *google_protobuf1.Empty, err error)
+	GetLicensesByOrg(ctx context.Context, req *GetLicensesByOrgReq) (resp *Licenses, err error)
 
-	SayHelloURL(ctx context.Context, req *HelloReq) (resp *HelloResp, err error)
+	GetLicense(ctx context.Context, req *GetLicenseReq) (resp *License, err error)
+
+	AddLicense(ctx context.Context, req *License) (resp *google_protobuf1.Empty, err error)
+
+	UpdateLicense(ctx context.Context, req *License) (resp *google_protobuf1.Empty, err error)
+
+	DeleteLicense(ctx context.Context, req *License) (resp *google_protobuf1.Empty, err error)
 }
 
-var DemoSvc DemoBMServer
+var LicensingSvc LicensingBMServer
 
-func demoPing(c *bm.Context) {
+func licensingPing(c *bm.Context) {
 	p := new(google_protobuf1.Empty)
 	if err := c.BindWith(p, binding.Default(c.Request.Method, c.Request.Header.Get("Content-Type"))); err != nil {
 		return
 	}
-	resp, err := DemoSvc.Ping(c, p)
+	resp, err := LicensingSvc.Ping(c, p)
 	c.JSON(resp, err)
 }
 
-func demoSayHello(c *bm.Context) {
-	p := new(HelloReq)
+func licensingGetLicensesByOrg(c *bm.Context) {
+	p := new(GetLicensesByOrgReq)
 	if err := c.BindWith(p, binding.Default(c.Request.Method, c.Request.Header.Get("Content-Type"))); err != nil {
 		return
 	}
-	resp, err := DemoSvc.SayHello(c, p)
+	resp, err := LicensingSvc.GetLicensesByOrg(c, p)
 	c.JSON(resp, err)
 }
 
-func demoSayHelloURL(c *bm.Context) {
-	p := new(HelloReq)
+func licensingGetLicense(c *bm.Context) {
+	p := new(GetLicenseReq)
 	if err := c.BindWith(p, binding.Default(c.Request.Method, c.Request.Header.Get("Content-Type"))); err != nil {
 		return
 	}
-	resp, err := DemoSvc.SayHelloURL(c, p)
+	resp, err := LicensingSvc.GetLicense(c, p)
 	c.JSON(resp, err)
 }
 
-// RegisterDemoBMServer Register the blademaster route
-func RegisterDemoBMServer(e *bm.Engine, server DemoBMServer) {
-	DemoSvc = server
-	e.GET("/demo.service.v1.Demo/Ping", demoPing)
-	e.GET("/demo.service.v1.Demo/SayHello", demoSayHello)
-	e.GET("/kratos-demo/say_hello", demoSayHelloURL)
+func licensingAddLicense(c *bm.Context) {
+	p := new(License)
+	if err := c.BindWith(p, binding.Default(c.Request.Method, c.Request.Header.Get("Content-Type"))); err != nil {
+		return
+	}
+	resp, err := LicensingSvc.AddLicense(c, p)
+	c.JSON(resp, err)
+}
+
+func licensingUpdateLicense(c *bm.Context) {
+	p := new(License)
+	if err := c.BindWith(p, binding.Default(c.Request.Method, c.Request.Header.Get("Content-Type"))); err != nil {
+		return
+	}
+	resp, err := LicensingSvc.UpdateLicense(c, p)
+	c.JSON(resp, err)
+}
+
+func licensingDeleteLicense(c *bm.Context) {
+	p := new(License)
+	if err := c.BindWith(p, binding.Default(c.Request.Method, c.Request.Header.Get("Content-Type"))); err != nil {
+		return
+	}
+	resp, err := LicensingSvc.DeleteLicense(c, p)
+	c.JSON(resp, err)
+}
+
+// RegisterLicensingBMServer Register the blademaster route
+func RegisterLicensingBMServer(e *bm.Engine, server LicensingBMServer) {
+	LicensingSvc = server
+	e.GET("/eagle.licensing.v1.Licensing/Ping", licensingPing)
+	e.GET("/v1/licenses", licensingGetLicensesByOrg)
+	e.GET("/v1/license", licensingGetLicense)
+	e.POST("/v1/license", licensingAddLicense)
+	e.PUT("/v1/license", licensingUpdateLicense)
+	e.DELETE("/v1/license", licensingDeleteLicense)
 }

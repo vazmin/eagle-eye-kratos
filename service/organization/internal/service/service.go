@@ -38,7 +38,12 @@ func (s *Service) AddOrganization(ctx context.Context, req *pb.Organization) (*e
 }
 
 func (s *Service) UpdateOrganization(ctx context.Context, req *pb.Organization) (*empty.Empty, error) {
-	return &empty.Empty{}, s.dao.UpdateOrganization(ctx, req)
+	org, err := s.GetOrganization(ctx, &pb.GetOrgReq{OrganizationId: req.Id})
+	if err != nil {
+		return nil, err
+	}
+	org.XXX_Merge(req)
+	return &empty.Empty{}, s.dao.UpdateOrganization(ctx, org)
 }
 
 func (s *Service) DeleteOrganization(ctx context.Context, req *pb.Organization) (*empty.Empty, error){

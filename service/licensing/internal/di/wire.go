@@ -5,6 +5,7 @@ package di
 
 import (
 	"github.com/vazmin/eagle-eye-kratos/service/licensing/internal/dao"
+	"github.com/vazmin/eagle-eye-kratos/service/licensing/internal/dao/org"
 	"github.com/vazmin/eagle-eye-kratos/service/licensing/internal/service"
 	"github.com/vazmin/eagle-eye-kratos/service/licensing/internal/server/grpc"
 	"github.com/vazmin/eagle-eye-kratos/service/licensing/internal/server/http"
@@ -14,5 +15,5 @@ import (
 
 //go:generate kratos t wire
 func InitApp() (*App, func(), error) {
-	panic(wire.Build(dao.Provider, service.Provider, http.New, grpc.New, NewApp))
+	panic(wire.Build(dao.Provider, service.Provider, http.New, grpc.New, NewApp, org.Provider))
 }

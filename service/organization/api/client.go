@@ -9,12 +9,12 @@ import (
 )
 
 // AppID .
-const AppID = "organization.service"
+const AppID = "127.0.0.1:9000"
 
 // NewClient new grpc client
 func NewClient(cfg *warden.ClientConfig, opts ...grpc.DialOption) (OrganizationSvcClient, error) {
 	client := warden.NewClient(cfg, opts...)
-	cc, err := client.Dial(context.Background(), fmt.Sprintf("discovery://default/%s", AppID))
+	cc, err := client.Dial(context.Background(), fmt.Sprintf("direct://default/%s", AppID))
 	if err != nil {
 		return nil, err
 	}
