@@ -55,8 +55,9 @@ func (s *Service) UpdateLicense(ctx context.Context, license *pb.License) (*empt
 	return &empty.Empty{}, s.dao.UpdateLicense(ctx, l)
 }
 
-func (s *Service) DeleteLicense(ctx context.Context, license *pb.License) (*empty.Empty, error) {
-	return &empty.Empty{}, s.dao.DeleteLicense(ctx, license)
+func (s *Service) DeleteLicense(ctx context.Context, req *pb.GetLicenseReq) (*empty.Empty, error) {
+	return &empty.Empty{}, s.dao.DeleteLicense(ctx,
+		&pb.License{OrganizationId:  req.OrganizationId, LicenseId: req.LicenseId})
 }
 
 // New new a service and return.

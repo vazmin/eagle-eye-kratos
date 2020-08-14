@@ -44,7 +44,7 @@ type LicensingBMServer interface {
 
 	UpdateLicense(ctx context.Context, req *License) (resp *google_protobuf1.Empty, err error)
 
-	DeleteLicense(ctx context.Context, req *License) (resp *google_protobuf1.Empty, err error)
+	DeleteLicense(ctx context.Context, req *GetLicenseReq) (resp *google_protobuf1.Empty, err error)
 }
 
 var LicensingSvc LicensingBMServer
@@ -95,7 +95,7 @@ func licensingUpdateLicense(c *bm.Context) {
 }
 
 func licensingDeleteLicense(c *bm.Context) {
-	p := new(License)
+	p := new(GetLicenseReq)
 	if err := c.BindWith(p, binding.Default(c.Request.Method, c.Request.Header.Get("Content-Type"))); err != nil {
 		return
 	}

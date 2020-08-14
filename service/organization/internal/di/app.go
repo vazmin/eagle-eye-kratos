@@ -2,6 +2,11 @@ package di
 
 import (
 	"context"
+	"github.com/go-kratos/kratos/pkg/conf/env"
+	"github.com/go-kratos/kratos/pkg/conf/paladin"
+	"github.com/go-kratos/kratos/pkg/naming"
+	"github.com/go-kratos/kratos/pkg/naming/etcd"
+	"github.com/vazmin/eagle-eye-kratos/service/organization/api"
 	"time"
 
 	"github.com/vazmin/eagle-eye-kratos/service/organization/internal/service"
@@ -24,6 +29,7 @@ func NewApp(svc *service.Service, h *bm.Engine, g *warden.Server) (app *App, clo
 		http: h,
 		grpc: g,
 	}
+	cf := DiscoveryRegister()
 	closeFunc = func() {
 		ctx, cancel := context.WithTimeout(context.Background(), 35*time.Second)
 		if err := g.Shutdown(ctx); err != nil {
@@ -32,7 +38,41 @@ func NewApp(svc *service.Service, h *bm.Engine, g *warden.Server) (app *App, clo
 		if err := h.Shutdown(ctx); err != nil {
 			log.Error("httpSrv.Shutdown error(%v)", err)
 		}
+		cf()
 		cancel()
 	}
 	return
+}
+
+func DiscoveryRegister() (closeFunc func()) {
+	var (
+		cfg warden.ServerConfig
+		ct paladin.TOML
+	)
+	if err := paladin.Get("grpc.toml").Unmarshal(&ct); err != nil {
+		return
+	}
+	if err := ct.Get("Server").UnmarshalTOML(&cfg); err != nil {
+		return
+	}
+	//hn, _ := os.Hostname()
+	dis, err := etcd.New(nil)
+	if err != nil {
+		panic(err)
+	}
+	ins := &naming.Instance{
+		Zone:     env.Zone,
+		Env:      env.DeployEnv,
+		AppID:    api.AppID,
+		//Hostname: hn,
+		Addrs: []string{
+			"grpc://" + cfg.Addr,
+		},
+	}
+	cancel, err := dis.Register(context.Background(), ins)
+	if err != nil {
+		panic(err)
+	}
+
+	return cancel
 }

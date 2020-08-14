@@ -2,11 +2,17 @@ package api
 import (
 	"context"
 	"fmt"
+	"github.com/go-kratos/kratos/pkg/naming/etcd"
+	"github.com/go-kratos/kratos/pkg/net/rpc/warden/resolver"
 
 	"github.com/go-kratos/kratos/pkg/net/rpc/warden"
 
 	"google.golang.org/grpc"
 )
+
+func init()  {
+	resolver.Register(etcd.Builder(nil))
+}
 
 // AppID .
 const AppID = "licensing.service"

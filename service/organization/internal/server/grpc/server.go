@@ -1,10 +1,9 @@
 package grpc
 
 import (
-	pb "github.com/vazmin/eagle-eye-kratos/service/organization/api"
-
 	"github.com/go-kratos/kratos/pkg/conf/paladin"
 	"github.com/go-kratos/kratos/pkg/net/rpc/warden"
+	pb "github.com/vazmin/eagle-eye-kratos/service/organization/api"
 )
 
 // New new a grpc server.

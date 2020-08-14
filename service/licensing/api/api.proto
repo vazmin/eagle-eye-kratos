@@ -53,7 +53,7 @@ service Licensing {
       put: "/v1/license"
     };
   };
-  rpc DeleteLicense(License) returns (.google.protobuf.Empty) {
+  rpc DeleteLicense(GetLicenseReq) returns (.google.protobuf.Empty) {
     option (google.api.http) = {
       delete: "/v1/license"
     };
