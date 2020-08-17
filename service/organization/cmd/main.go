@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"github.com/go-kratos/kratos/pkg/net/trace/zipkin"
 	"os"
 	"os/signal"
 	"syscall"
@@ -23,10 +22,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-
-	zipkin.Init(&zipkin.Config{
-		Endpoint: "http://localhost:9411/api/v2/spans",
-	})
 
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, syscall.SIGHUP, syscall.SIGQUIT, syscall.SIGTERM, syscall.SIGINT)

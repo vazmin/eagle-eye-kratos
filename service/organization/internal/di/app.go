@@ -6,10 +6,12 @@ import (
 	"github.com/go-kratos/kratos/pkg/conf/paladin"
 	"github.com/go-kratos/kratos/pkg/naming"
 	"github.com/go-kratos/kratos/pkg/naming/etcd"
+	"github.com/go-kratos/kratos/pkg/net/trace/zipkin"
 	"github.com/vazmin/eagle-eye-kratos/service/organization/api"
 	"time"
 
 	"github.com/vazmin/eagle-eye-kratos/service/organization/internal/service"
+	appenv "github.com/vazmin/eagle-eye-kratos/common/env"
 
 	"github.com/go-kratos/kratos/pkg/log"
 	bm "github.com/go-kratos/kratos/pkg/net/http/blademaster"
@@ -29,6 +31,7 @@ func NewApp(svc *service.Service, h *bm.Engine, g *warden.Server) (app *App, clo
 		http: h,
 		grpc: g,
 	}
+	InitZipkin()
 	cf := DiscoveryRegister()
 	closeFunc = func() {
 		ctx, cancel := context.WithTimeout(context.Background(), 35*time.Second)
@@ -75,4 +78,13 @@ func DiscoveryRegister() (closeFunc func()) {
 	}
 
 	return cancel
+}
+
+func InitZipkin()  {
+	ep := appenv.ZipkinEndpoint
+	if ep != "" {
+		zipkin.Init(&zipkin.Config{
+			Endpoint: ep + "/api/v2/spans",
+		})
+	}
 }
