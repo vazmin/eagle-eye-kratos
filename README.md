@@ -9,6 +9,6 @@ The implementation is based on the [spmia-chapter10] (https://github.com/carnell
 
 # start
 
-```
-
+```shell script
+docker-compose up
 ```
