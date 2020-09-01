@@ -1,0 +1,100 @@
+version: "3.7"
+
+services:
+  licensing:
+    build:
+      dockerfile: ./service/licensing/Dockerfile
+      context: ./
+    ports:
+      - 8001:8001
+      - 9001:9001
+    env_file:
+      - .env
+    environment:
+      APP_ID: licensing
+      GRPC: tcp://0.0.0.0:9001/?timeout=5s&idle_timeout=60s
+    depends_on:
+      - etcd
+#    restart: always
+  organizations:
+    build:
+     dockerfile: ./service/organization/Dockerfile
+     context: ./
+    ports:
+      - 8000:8000
+      - 9000:9000
+    env_file:
+      - .env
+    environment:
+      APP_ID: organization
+      GRPC: tcp://0.0.0.0:9000/?timeout=5s&idle_timeout=60s
+      GRPC_REG_ADDR: grpc://192.168.1.26:9000
+    depends_on:
+      - etcd
+#    restart: always
+  etcd:
+    container_name: etcd0
+#    image: gcr.io/etcd-development/etcd:v3.4.12
+    image: quay.io/coreos/etcd:v3.4.12
+    ports:
+      - "2379:2379"
+      - "2380:2380"
+    environment:
+      - TZ=CST-8
+      - LANG=zh_CN.UTF-8
+    command:
+      /usr/local/bin/etcd
+      --name etcd0
+      --data-dir /etcd-data
+      --listen-client-urls http://0.0.0.0:2379
+      --advertise-client-urls http://0.0.0.0:2379
+      --listen-peer-urls http://0.0.0.0:2380
+      --initial-advertise-peer-urls http://0.0.0.0:2380
+      --initial-cluster etcd0=http://0.0.0.0:2380
+      --initial-cluster-token tkn
+      --initial-cluster-state new
+      --log-level info
+      --logger zap
+      --log-outputs stderr
+    volumes:
+#      - "/e/data/docker/etcd:/etcd-data"
+       - "/data/config/etcd/ca-certificates/:/etc/ssl/certs"
+    healthcheck:
+      test: ["CMD", "etcdctl" ,"-version"]
+      timeout: 20s
+      interval: 1s
+      retries: 20
+  zipkin:
+    image: openzipkin/zipkin
+    ports:
+      - 9411:9411
+
+  redis:
+    image: redis
+    ports:
+      - 16379:6379
+    healthcheck:
+      test: ["CMD", "redis-cli","ping"]
+      interval: 20s
+      timeout: 1s
+      retries: 20
+      
+#  db:
+#    image: mysql:5.6
+#    ports:
+#      - 13306:3306
+#    environment:
+#      - MYSQL_ROOT_PASSWORD=root
+#      - TZ=Asia/Shanghai
+#    volumes:
+#      - .:/docker-entrypoint-initdb.d
+#    command: [
+#      '--character-set-server=utf8',
+#      '--collation-server=utf8_unicode_ci'
+#    ]
+#    healthcheck:
+#      test: ["CMD", "mysqladmin" ,"ping", "--protocol=tcp"]
+#      timeout: 20s
+#      interval: 1s
+#      retries: 20
+

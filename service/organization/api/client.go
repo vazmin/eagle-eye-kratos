@@ -5,11 +5,14 @@ import (
 	"github.com/go-kratos/kratos/pkg/naming/etcd"
 	"github.com/go-kratos/kratos/pkg/net/rpc/warden"
 	"github.com/go-kratos/kratos/pkg/net/rpc/warden/resolver"
+	"github.com/prometheus/common/log"
+	"os"
 
 	"google.golang.org/grpc"
 )
 
-func init()  {
+func Init()  {
+	log.Debug("etcd endpoints: %s", os.Getenv("ETCD_ENDPOINTS"))
 	resolver.Register(etcd.Builder(nil))
 }
 // AppID .

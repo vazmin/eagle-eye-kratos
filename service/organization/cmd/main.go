@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"github.com/vazmin/eagle-eye-kratos/service/organization/api"
 	"os"
 	"os/signal"
 	"syscall"
@@ -18,6 +19,7 @@ func main() {
 	defer log.Close()
 	log.Info("organization start")
 	paladin.Init()
+	api.Init()
 	_, closeFunc, err := di.InitApp()
 	if err != nil {
 		panic(err)

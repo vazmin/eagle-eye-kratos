@@ -2,6 +2,8 @@ package di
 
 import (
 	"context"
+	"github.com/go-kratos/kratos/pkg/net/trace/zipkin"
+	appenv "github.com/vazmin/eagle-eye-kratos/common/env"
 	"time"
 
 	"github.com/vazmin/eagle-eye-kratos/service/licensing/internal/service"
@@ -24,6 +26,8 @@ func NewApp(svc *service.Service, h *bm.Engine, g *warden.Server) (app *App, clo
 		http: h,
 		grpc: g,
 	}
+	appenv.Init()
+	InitZipkin()
 	closeFunc = func() {
 		ctx, cancel := context.WithTimeout(context.Background(), 35*time.Second)
 		if err := g.Shutdown(ctx); err != nil {
@@ -35,4 +39,13 @@ func NewApp(svc *service.Service, h *bm.Engine, g *warden.Server) (app *App, clo
 		cancel()
 	}
 	return
+}
+
+func InitZipkin()  {
+	ep := appenv.ZipkinEndpoint
+	if ep != "" {
+		zipkin.Init(&zipkin.Config{
+			Endpoint: ep + "/api/v2/spans",
+		})
+	}
 }

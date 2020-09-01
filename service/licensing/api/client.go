@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc"
 )
 
-func init()  {
+func Init()  {
 	resolver.Register(etcd.Builder(nil))
 }
 

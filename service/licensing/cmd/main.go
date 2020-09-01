@@ -3,6 +3,8 @@ package main
 import (
 	"flag"
 	"github.com/go-kratos/kratos/pkg/net/trace/zipkin"
+	appenv "github.com/vazmin/eagle-eye-kratos/common/env"
+	"github.com/vazmin/eagle-eye-kratos/service/licensing/api"
 	"github.com/vazmin/eagle-eye-kratos/service/licensing/internal/di"
 	"os"
 	"os/signal"
@@ -19,13 +21,14 @@ func main() {
 	defer log.Close()
 	log.Info("licensing start")
 	paladin.Init()
+	api.Init()
 	_, closeFunc, err := di.InitApp()
 	if err != nil {
 		panic(err)
 	}
 
 	zipkin.Init(&zipkin.Config{
-		Endpoint: "http://localhost:9411/api/v2/spans",
+		Endpoint: appenv.ZipkinEndpoint + "/api/v2/spans",
 	})
 
 	c := make(chan os.Signal, 1)
